@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Schema for covid19 data",
+  "type": "object",
+  "definitions": {
+    "author": {
+      "type": "object",
+      "properties": {
+        "first": {
+          "type": "string"
+        },
+        "middle": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "last": {
+          "type": "string"
+        },
+        "suffix": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "affiliation": {
+          "type": "object",
+          "properties": {
+            "laboratory": {
+              "type": "string"
+            },
+            "institution": {
+              "type": "string"
+            },
+            "location": {
+              "type": "object",
+              "properties": {
+                "postcode": {
+                  "type": "string"
+                },
+                "settlement": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "span": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "number"
+        },
+        "end": {
+          "type": "number"
+        },
+        "text": {
+          "type": "string"
+        },
+        "ref_id": {
+          "type": "string"
+        }
+      }
+    },
+    "content": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "section": {
+          "type": "string"
+        },
+        "cite_spans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/span"
+          }
+        },
+        "ref_spans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/span"
+          }
+        },
+        "eq_spans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/span"
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "paper_id": { "type": "string", "minLength": 40,  "maxLength": 40 },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "authors": { "type": "array", "items": { "$ref": "#/definitions/author" } },
+        "abstract": { "type": "array", "items": { "$ref": "#/definitions/content" } },
+        "body_text": { "type": "array", "items": { "$ref": "#/definitions/content" } },
+        "back_matter": { "type": "array", "items": { "$ref": "#/definitions/content" } }
+        },
+      "ref_entries": {
+        "type":  "object",
+        "patternProperties": {
+          "^FIGREF[0-9]+$": {
+            "type": "object",
+            "properties": {
+              "text" : { "type": "string" },
+              "type": { "type": "string", "enum": ["figure", "table"]  }
+            }
+          },
+          "^TABREF[0-9]+$": {
+            "type": "object",
+            "properties": {
+              "text" : { "type": "string" },
+              "type": { "type": "string", "enum": ["figure", "table"]  }
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "bib_entries": {
+        "type":  "object",
+        "patternProperties": {
+          "^BIBREF[0-9]+$": {
+            "type": "object",
+            "properties": {
+              "ref_id": { "type": "string" },
+              "title": { "type": "string" },
+              "year": { "type": "number" },
+              "venue": { "type": "string" },
+              "volume": { "type": "string" },
+              "issn": { "type": "string" },
+              "pages": { "type": "string" },
+              "other_ids": {
+                "type": "object",
+                "properties": {
+                  "DOI": {"type": "array", "items": {"type":  "string"}  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
