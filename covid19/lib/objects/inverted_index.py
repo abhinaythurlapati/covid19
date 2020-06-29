@@ -5,7 +5,6 @@ from covid19 import inverted_index_dir, total_files
 from os import path
 from math import log10
 
-
 num_docs = total_files
 
 
@@ -93,6 +92,7 @@ class InvertedIndex:
                 else:
                     InvertedIndex.inverted_index[word] = InvertedIndex.get_data_structure()
                     InvertedIndex.inverted_index[word][field][uid] = word_count
+        return InvertedIndex.inverted_index
 
     @staticmethod
     def write_to_file(filename=inverted_index_file_path):
@@ -180,66 +180,63 @@ class InvertedIndex:
             if fields == 'all':
                 for key, value in update_dict.items():
                     update_dict[key] = True
+            else:
+                if fields not in any(update_dict.keys()):
+                    raise ValueError('kw_arg "fields" takes one of {} if type is "str"'.format(','.join(update_dict.keys())))
 
         if isinstance(fields, list):
             for field in fields:
-                update_dict[field] = True
+                if field in update_dict.keys():
+                    update_dict[field] = True
+                else:
+                    raise ValueError('kw_arg "fields" takes these values  {} if type is "list"'.format(','.join(update_dict.keys())))
 
         if InvertedIndex.get_length() == 0:
             InvertedIndex.inverted_index = inverted_index2
             return
 
         if update_dict[RPVocab.title]:
-            for word, word_dict in inverted_index2:
+            for word, word_dict in inverted_index2.items():
                 if word in inverted_index1:
-                    inverted_index1[word][RPVocab.title] = inverted_index1[word][RPVocab.title].update(
-                        inverted_index2[word][RPVocab.title])
+                    inverted_index1[word][RPVocab.title].update(inverted_index2[word][RPVocab.title])
                 else:
                     InvertedIndex.inverted_index[word] = InvertedIndex.get_data_structure()
-                    inverted_index1[word][RPVocab.title] = inverted_index1[word][RPVocab.title].update(
-                        inverted_index2[word][RPVocab.title])
+                    inverted_index1[word][RPVocab.title].update(inverted_index2[word][RPVocab.title])
 
         if update_dict[RPVocab.abstract]:
-            for word, word_dict in inverted_index2:
+            for word, word_dict in inverted_index2.items():
                 if word in inverted_index1:
-                    inverted_index1[word][RPVocab.abstract] = inverted_index1[word][RPVocab.abstract].update(
-                        inverted_index2[word][RPVocab.abstract])
+                    inverted_index1[word][RPVocab.abstract].update(inverted_index2[word][RPVocab.abstract])
                 else:
                     InvertedIndex.inverted_index[word] = InvertedIndex.get_data_structure()
-                    inverted_index1[word][RPVocab.abstract] = inverted_index1[word][RPVocab.abstract].update(
-                        inverted_index2[word][RPVocab.abstract])
+                    inverted_index1[word][RPVocab.abstract].update(inverted_index2[word][RPVocab.abstract])
 
         if update_dict[RPVocab.headers]:
-            for word, word_dict in inverted_index2:
+            for word, word_dict in inverted_index2.items():
                 if word in inverted_index1:
-                    inverted_index1[word][RPVocab.headers] = inverted_index1[word][RPVocab.headers].update(
-                        inverted_index2[word][RPVocab.headers])
+                    inverted_index1[word][RPVocab.headers].update(inverted_index2[word][RPVocab.headers])
                 else:
                     InvertedIndex.inverted_index[word] = InvertedIndex.get_data_structure()
-                    inverted_index1[word][RPVocab.headers] = inverted_index1[word][RPVocab.headers].update(
-                        inverted_index2[word][RPVocab.headers])
+                    inverted_index1[word][RPVocab.headers].update(inverted_index2[word][RPVocab.headers])
 
         if update_dict[RPVocab.body_text]:
-            for word, word_dict in inverted_index2:
+            for word, word_dict in inverted_index2.items():
                 if word in inverted_index1:
-                    inverted_index1[word][RPVocab.body_text] = inverted_index1[word][RPVocab.body_text].update(
-                        inverted_index2[word][RPVocab.body_text])
+                    inverted_index1[word][RPVocab.body_text].update(inverted_index2[word][RPVocab.body_text])
                 else:
                     InvertedIndex.inverted_index[word] = InvertedIndex.get_data_structure()
-                    inverted_index1[word][RPVocab.body_text] = inverted_index1[word][RPVocab.body_text].update(
-                        inverted_index2[word][RPVocab.body_text])
+                    inverted_index1[word][RPVocab.body_text].update(inverted_index2[word][RPVocab.body_text])
 
         if update_dict[RPVocab.full_text]:
-            for word, word_dict in inverted_index2:
+            for word, word_dict in inverted_index2.items():
                 if word in inverted_index1:
-                    inverted_index1[word][RPVocab.full_text] = inverted_index1[word][RPVocab.full_text].update(
-                        inverted_index2[word][RPVocab.full_text])
+                    inverted_index1[word][RPVocab.full_text].update(inverted_index2[word][RPVocab.full_text])
                 else:
                     InvertedIndex.inverted_index[word] = InvertedIndex.get_data_structure()
-                    inverted_index1[word][RPVocab.full_text] = inverted_index1[word][RPVocab.full_text].update(
-                        inverted_index2[word][RPVocab.full_text])
+                    inverted_index1[word][RPVocab.full_text].update(inverted_index2[word][RPVocab.full_text])
 
         InvertedIndex.inverted_index = inverted_index1
+
 
     @staticmethod
     def get_topN_matching_docs(search_results, top_N=5):

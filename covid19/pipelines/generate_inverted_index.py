@@ -118,7 +118,7 @@ if __name__ == "__main__":
     corpus_queue = Queue(maxsize=100)
     words_queue = Queue()
     results_queue = Queue(maxsize=10)
-    lock = Lock()
+    global_inverted_index = InvertedIndex()
 
     data_gen_process = Process(target=sentences_producer, args=(corpus_queue, LoadData(),), name='sentence producer')
 
@@ -143,11 +143,16 @@ if __name__ == "__main__":
         logger.info('Starting {} process having pid {}'.format(process.name, process.pid))
         process.start()
 
+    import json
+
     while any([process.is_alive() for process in corpus_to_words_process]) or results_queue.empty() is False:
         try:
-            inverted_index = results_queue.get(timeout=300)
-            InvertedIndex.merge_with_other(inverted_index, fields=all)
-            logger.info('Global Inverted index updated to size: {}'.format(InvertedIndex.get_length()))
+            i_index = results_queue.get(timeout=300)
+            logger.info('id of i_index: {}'.format(id(i_index)))
+            logger.info('Length of inverted index: {}'. format(global_inverted_index.get_length()))
+            logger.info('Length of inverted index about to be merged: {}'.format(len(i_index)))
+            global_inverted_index.merge_with_other(i_index, fields='all')
+            logger.info('Global Inverted index updated to size: {} after Merging'.format(global_inverted_index.get_length()))
 
             # update the data frame with the results generated and write to file
 

@@ -44,7 +44,7 @@ if not path.isdir(vocabulary_dir):
 
 # logging definintions
 logging.basicConfig(
-    filename= path.join(config['logs_dir','pytonic.log']),
+    filename= path.join(config['logs_dir'], 'pytonic.log'),
     level=logging.DEBUG,
     format="%(asctime)s %(levelname)s %(process)s %(module)s %(funcName)s %(message)s",
     datefmt="%m/%d/%Y %I:%M:%S %p"
