@@ -171,4 +171,3 @@ class ResearchPaper:
 
             authors_names.append(author_name)
         return authors_names
-

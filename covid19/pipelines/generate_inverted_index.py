@@ -5,10 +5,10 @@ from covid19.lib.objects.inverted_index import InvertedIndex
 from covid19.DataManagement.loaddata import LoadData
 from covid19.DataManagement.datapreprocessing import DataPreProcessing
 
-from multiprocessing import current_process, Queue, Lock, Process
+from multiprocessing import current_process, Queue, Process
 from queue import Empty
 from time import time
-from covid19 import logger, metadata_path, inverted_index_dir
+from covid19 import logger, inverted_index_dir
 from os import path
 
 

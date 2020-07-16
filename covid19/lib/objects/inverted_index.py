@@ -237,13 +237,12 @@ class InvertedIndex:
 
         InvertedIndex.inverted_index = inverted_index1
 
-
     @staticmethod
-    def get_topN_matching_docs(search_results, top_N=5):
+    def get_top_n_matching_docs(search_results, top_N=5):
         """
         {
-          "doc_id1": score
-          "doc_id2":
+          "doc_id1": score1
+          "doc_id2": score2
 
         }
         :param search_results:

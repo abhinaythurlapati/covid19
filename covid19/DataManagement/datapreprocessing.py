@@ -179,7 +179,6 @@ class DataPreProcessing:
 
         return [word for word in words if not word.isdigit()]
 
-
     @staticmethod
     def remove_by_length(words, length=2):
         """
@@ -189,6 +188,8 @@ class DataPreProcessing:
         if not isinstance(words, list):
             raise TypeError('kw_arg "words" should be of type list')
 
+        if length < 0:
+            raise ValueError('kw_arg: "length" should be non negative')
         return [word for word in words if len(word) > length]
 
     @staticmethod
@@ -250,7 +251,21 @@ class DataPreProcessing:
         if not isinstance(words, list):
             raise TypeError("kw_arg: 'words' should be of type 'list' ")
 
-        return [ DataPreProcessing.snowball_stemmer.stem(word) for word in words]
+        return [DataPreProcessing.snowball_stemmer.stem(word) for word in words]
+
+    @staticmethod
+    def clean_text(text='', remove_char_length=2):
+        if not isinstance(text, str):
+            raise TypeError('kw_arg: "text" is not of type "str"')
+
+        tokens = DataPreProcessing.word_tokenizer(document=text, to_lower=True)
+        filtered_words = DataPreProcessing.remove_hyperlinks(tokens)
+        processed_words = DataPreProcessing.remove_special_chars(filtered_words)
+        filtered_words = DataPreProcessing.remove_numbers(processed_words)
+        filtered_words = DataPreProcessing.remove_by_length(filtered_words, length=remove_char_length)
+        filtered_words = DataPreProcessing.remove_stop_words(words=filtered_words)
+        stemmed_words = DataPreProcessing.stemmer(filtered_words)
+        return stemmed_words
 
 
 class VocabularyBuilder(DataPreProcessing):

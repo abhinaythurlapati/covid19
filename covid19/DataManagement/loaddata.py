@@ -27,3 +27,16 @@ class LoadData:
                     file_path = path.join(data_dir, filename)
                     with open(file_path) as json_file:
                         yield json.load(json_file)
+
+    @staticmethod
+    def get_research_paper_by_id(uid=None):
+        if len(uid) == 0:
+            raise ValueError("'uid' should not be valid string")
+        for data_dir in data_dir_paths:
+            filename = uid + '.json'
+            file_path = path.join(data_dir, filename)
+            if path.isfile(file_path):
+                with open(file_path) as json_file:
+                    return json.load(json_file)
+
+        raise FileNotFoundError('{} not found in {}'.format(file_path, data_dir_paths))

@@ -2,7 +2,6 @@ import yaml
 from os import path, mkdir
 import logging
 import multiprocessing_logging
-import pandas as pd
 
 # get the current directory where this __init__.py resides
 cur_dir = path.dirname(path.realpath(__file__))
@@ -53,3 +52,15 @@ multiprocessing_logging.install_mp_handler()
 logger = logging.getLogger('dev')
 
 total_files = 65000
+
+tasks_dir = path.join(cur_dir, 'config', 'tasks')
+if not path.isdir(tasks_dir):
+    raise NotADirectoryError('tasks directory {} not found'.format(tasks_dir))
+
+tasks_qa_dir = path.join(tasks_dir, 'QA')
+if not path.isdir(tasks_qa_dir):
+    raise NotADirectoryError('tasks QA directory {} not found'.format(tasks_qa_dir))
+
+tasks_summary_tables_dir = path.join(tasks_dir, 'summary_tables')
+if not path.isdir(tasks_summary_tables_dir):
+    raise NotADirectoryError('tasks summary_tables directory {} not found'.format(tasks_summary_tables_dir))
